@@ -16,7 +16,7 @@ class PlayerMode(Enum):
 
 
 class Player(Entity):
-    def __init__(self, config: GameConfig) -> None:
+    def __init__(self, config: GameConfig, input_source="computer") -> None:
         image = config.images.player[0]
         x = int(config.window.width * 0.2)
         y = int((config.window.height - image.get_height()) / 2)
@@ -29,6 +29,7 @@ class Player(Entity):
         self.crashed = False
         self.crash_entity = None
         self.set_mode(PlayerMode.SHM)
+        self.input_source = input_source
 
     def set_mode(self, mode: PlayerMode) -> None:
         self.mode = mode
@@ -115,6 +116,10 @@ class Player(Entity):
     def rotate(self) -> None:
         self.rot = clamp(self.rot + self.vel_rot, self.rot_min, self.rot_max)
 
+    def update_position(self, Cy):
+        self.Cy = Cy  # Atualize a posição Y com base em Cy
+        self.y = int(self.Cy - self.h / 2)
+
     def draw(self) -> None:
         self.update_image()
         if self.mode == PlayerMode.SHM:
@@ -123,7 +128,6 @@ class Player(Entity):
             self.tick_normal()
         elif self.mode == PlayerMode.CRASH:
             self.tick_crash()
-
         self.draw_player()
 
     def draw_player(self) -> None:
@@ -134,7 +138,7 @@ class Player(Entity):
     def stop_wings(self) -> None:
         self.img_gen = cycle([self.img_idx])
 
-    def flap(self) -> None:
+    def flap(self):
         if self.y > self.min_y:
             self.vel_y = self.flap_acc
             self.flapped = True
