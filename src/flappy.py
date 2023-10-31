@@ -175,15 +175,6 @@ class Flappy:
         mask_v = mask_vmin * mask_vmax
         mask = mask_h * mask_s * mask_v
 
-        # Pré-processamento da imagem em escala de cinza
-        grayscale_image = cv2.cvtColor(image_hsv, cv2.COLOR_BGR2GRAY)
-
-
-        equ = cv2.equalizeHist(grayscale_image)
-
-        kernel = np.ones((5, 5), np.uint8)
-        erosion = cv2.erode(equ, kernel, iterations=1)
-
         contours, hierarchy = cv2.findContours(image=mask, mode=cv2.RETR_TREE, method=cv2.CHAIN_APPROX_NONE)
 
         mask_filtered = np.zeros(mask.shape, np.uint8)
