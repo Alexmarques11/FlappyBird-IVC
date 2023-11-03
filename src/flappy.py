@@ -45,12 +45,12 @@ class Flappy:
         self.vmin = 0
 
         # Variáveis para exibir janelas
-        self.show_camera = True
+        self.show_camara = True
         self.show_mask = False
         self.show_mask_filtered = False
 
     async def start(self):
-        # Crie uma thread separada para a segmentação de imagem
+
         threading.Thread(target=self.segmentation_thread, daemon=True).start()
 
         while True:
@@ -61,7 +61,6 @@ class Flappy:
             self.game_over_message = GameOver(self.config)
             self.pipes = Pipes(self.config)
             self.score = Score(self.config)
-            self.previous_frame = None  # Inicialize o atributo previous_frame
 
             await self.splash()
             await self.play()
@@ -194,7 +193,7 @@ class Flappy:
         cv2.imshow("Mask Filtered", mask_filtered)
         return mask, mask_filtered
     def segmentation_thread(self):
-        cv2.namedWindow("Camera")
+        cv2.namedWindow("Camara")
         cv2.namedWindow("Segmentation Trackbars")
         cv2.createTrackbar("Hmin", "Segmentation Trackbars", self.hmin, 180, self.on_change_hmin)
         cv2.createTrackbar("Hmax", "Segmentation Trackbars", self.hmax, 180, self.on_change_hmax)
@@ -214,8 +213,8 @@ class Flappy:
             mask, mask_filtered = self.update_segmentation(image_hsv)
 
             # Exibir as imagens em janelas separadas
-            if self.show_camera:
-                cv2.imshow("Camera", image)
+            if self.show_camara:
+                cv2.imshow("Camara", image)
             if self.show_mask:
                 cv2.imshow("Mask", mask)
             if self.show_mask_filtered:
@@ -224,7 +223,6 @@ class Flappy:
             c = cv2.waitKey(1)
             if c == 27:
                 break
-
     def on_change_hmin(self, val):
         self.hmin = val
 
